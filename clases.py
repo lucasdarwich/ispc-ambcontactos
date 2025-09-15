@@ -31,10 +31,17 @@ class ConexionDB:
 
 
 class Contactos:
+    """
+    Clase para manejar operaciones CRUD en la tabla Contactos.
+    """
     def __init__(self, conexion_db):
+        
         self.conexion_db = conexion_db
 
     def agregar(self, nombre, apellido, telefono, email):
+        """
+        Agrega un nuevo contacto a la base de datos.
+        """
         sql = "INSERT INTO Contactos (Nombre, Apellido, Telefono, Email) VALUES (%s, %s, %s, %s)"
         valores = (nombre, apellido, telefono, email)
         self.conexion_db.cursor.execute(sql, valores)
@@ -42,16 +49,18 @@ class Contactos:
         print("✅ Contacto agregado")
 
     def listar(self):
+        """
+        Lista todos los contactos en la base de datos.
+        """
         self.conexion_db.cursor.execute("SELECT * FROM Contactos")
         resultados = self.conexion_db.cursor.fetchall()
-        return resultados   # 👈 devolvemos la lista en lugar de imprimir
-
-    def buscar(self, id_contacto):
-        sql = "SELECT * FROM Contactos WHERE idContacto = %s"
-        self.conexion_db.cursor.execute(sql, (id_contacto,))
-        return self.conexion_db.cursor.fetchone()   # 👈 devolvemos el resultado
-
+        return resultados
+    
     def actualizar(self, id_contacto, nombre=None, apellido=None, telefono=None, email=None):
+        """
+        Actualiza un contacto existente en la base de datos. 
+        si no hay parametros para actualizar, retorna 0
+        """ 
         sets = []
         valores = []
 
@@ -79,6 +88,9 @@ class Contactos:
 
 
     def eliminar(self, id_contacto):
+        """
+        Elimina un contacto por ID de la base de datos.
+        """
         sql = "DELETE FROM Contactos WHERE idContacto=%s"
         self.conexion_db.cursor.execute(sql, (id_contacto,))
         self.conexion_db.conexion.commit()
